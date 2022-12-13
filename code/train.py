@@ -2,6 +2,7 @@ import os
 import os.path as osp
 import time
 import math
+import wandb
 from datetime import timedelta
 from argparse import ArgumentParser
 
@@ -45,6 +46,13 @@ def parse_args():
 
 def do_training(data_dir, model_dir, device, image_size, input_size, num_workers, batch_size,
                 learning_rate, max_epoch, save_interval):
+    wandb.init(project="data_anno", entity="sunq", name = 'test')
+    wandb.config = {
+        "epoch" : max_epoch,
+        "lr" : learning_rate
+                    }
+    
+    
     dataset = SceneTextDataset(data_dir, split='train', image_size=image_size, crop_size=input_size)
     dataset = EASTDataset(dataset)
     num_batches = math.ceil(len(dataset) / batch_size)
@@ -82,6 +90,8 @@ def do_training(data_dir, model_dir, device, image_size, input_size, num_workers
 
         print('Mean loss: {:.4f} | Elapsed time: {}'.format(
             epoch_loss / num_batches, timedelta(seconds=time.time() - epoch_start)))
+        
+        wandb.log({"Mean_loss" : epoch_loss / num_batches})
 
         if (epoch + 1) % save_interval == 0:
             if not osp.exists(model_dir):
