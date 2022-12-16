@@ -341,7 +341,8 @@ class SceneTextDataset(Dataset):
 
         self.anno = anno
         self.image_fnames = sorted(anno['images'].keys())
-        self.image_dir = osp.join(root_dir, 'images')
+        # self.image_dir = osp.join(root_dir, 'images')
+        self.image_dir = osp.join(root_dir, 'final_data/images')  # 경로를 final_data/images로 바꾸면 최종data에 대해 train########################
 
         self.image_size, self.crop_size = image_size, crop_size
         self.color_jitter, self.normalize = color_jitter, normalize
@@ -372,10 +373,11 @@ class SceneTextDataset(Dataset):
         image = np.array(image)
 
         funcs = []
+        funcs.append(A.ElasticTransform(alpha=np.random.rand()*30,sigma=4,alpha_affine=0))
         if self.color_jitter:
             funcs.append(A.ColorJitter(0.5, 0.5, 0.5, 0.25))
         if self.normalize:
-            funcs.append(A.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)))
+            funcs.append(A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))) # imagenet기준으로 norm값변경
         transform = A.Compose(funcs)
 
         image = transform(image=image)['image']
