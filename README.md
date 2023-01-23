@@ -1,14 +1,42 @@
-## 데이터 제작 프로젝트
-### 학습 데이터 추가 및 수정을 통한 이미지 속 글자 검출 성능 개선 대회
+# 데이터 제작 프로젝트
+#### 학습 데이터 추가 및 수정을 통한 이미지 속 글자 검출 성능 개선 대회
 <img width="816" alt="dataan" src="https://user-images.githubusercontent.com/70750888/206357361-2117f476-fe81-4447-8f4b-f6406b191b24.png">
 
+<br/> 
 
-### Overview
-스마트폰으로 카드를 결제하거나, 카메라로 카드를 인식할 경우 자동으로 카드 번호가 입력되는 경우가 있습니다. 또 주차장에 들어가면 차량 번호가 자동으로 인식되는 경우도 흔히 있습니다. 이처럼 OCR (Optimal Character Recognition) 기술은 사람이 직접 쓰거나 이미지 속에 있는 문자를 얻은 다음 이를 컴퓨터가 인식할 수 있도록 하는 기술로, 컴퓨터 비전 분야에서 현재 널리 쓰이는 대표적인 기술 중 하나입니다.
+## 프로젝트 개요
+- 주제
+    - OCR task는 글자 검출 (text detection), 글자 인식 (text recognition), 정렬기 (Serializer) 등의 모듈로 구성되지만, 본 대회에서는 **'글자 검출' task** 만을 해결
+    - 본 대회는 **데이터를 구성하고 활용하는 방법**에 집중하는 것을 장려하는 취지에서, 제공되는 베이스 코드 중 **모델(EAST)과 관련한 부분을 변경하는 것이 금지**
+- 데이터
+    - 제공된 학습 데이터: 1510장
+    - 평가 데이터 : 크롤링된 이미지 300장  
 
-OCR task는 글자 검출 (text detection), 글자 인식 (text recognition), 정렬기 (Serializer) 등의 모듈로 이루어져 있습니다. 본 대회는 아래와 같은 특징과 제약 사항이 있습니다.
+<br/> 
 
-- 본 대회에서는 '글자 검출' task 만을 해결하게 됩니다.
-- 예측 csv 파일 제출 (Evaluation) 방식이 아닌 model checkpoint 와 inference.py 를 제출하여 채점하는 방식입니다.
-- Input : 글자가 포함된 전체 이미지
-- Output : bbox 좌표가 포함된 UFO Format
+## 팀 구성
+  - 김도윤, 김형석, 박근태, 양윤석, 정선규 (총 5인)  
+
+<br/> 
+  
+## 프로젝트 상세 내용
+  - 데이터 셋 제작 → 학습 데이터의 양이 적었기에, ICDAR 17 5k, ICDAR19 5K 추가
+  - Synthetic data set인 UnrealText로 pretrain 후, target data로 fine tuning
+  - Multi-scale-crop training → 512~1024 사이로 random crop 후 512로 resize
+  - 다양한 글씨체, 글씨 변형에 대한 robustness 부여 위해 Elastic transform 사용  
+
+<br/> 
+  
+## 모델 개요
+  - Model : EAST
+  - Optimizer : Adam
+  - Scheduler : MultiStepLr
+  - Pretrained on Unrealtext  
+
+<br/> 
+
+## 결과
+  ||F1 score|순위|
+|------|---|---|
+|**Public Leaderbord**|0.6839|7/19|
+|**Private Leaderbord**|0.6720|8/19|
