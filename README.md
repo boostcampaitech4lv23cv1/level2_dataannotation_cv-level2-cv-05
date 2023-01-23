@@ -20,6 +20,8 @@
 <br/> 
   
 ## 프로젝트 상세 내용
+<img width="600" alt="dataan" src="https://user-images.githubusercontent.com/94054909/214060987-d43a59e3-4dac-428b-990b-b7725d087002.png">
+
   - 데이터 셋 제작 → 학습 데이터의 양이 적었기에, ICDAR 17 5k, ICDAR19 5K 추가
   - Synthetic data set인 UnrealText로 pretrain 후, target data로 fine tuning
   - Multi-scale-crop training → 512~1024 사이로 random crop 후 512로 resize
